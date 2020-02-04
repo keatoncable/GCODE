@@ -13,7 +13,7 @@ x = [0 0 5 5 15 15 10 10 5 5 0];
 y = [5 20 15 20 20 5 5 0 0 5 5];
 x2 = [0.2 0.2 5.2 5.2 14.8 14.8 9.8 9.8 5.2 5.2 0.2];
 y2 = [5.2 19.5 14.5 19.8 19.8 5.2 5.2 0.2 0.2 5.2 5.2];
-x3 = [0.4 0.4 5.4 5.4 14.6 14.6 9.6 9.6 5.4 5.4 0.2];
+x3 = [0.4 0.4 5.4 5.4 14.6 14.6 9.6 9.6 5.4 5.4 0.4];
 y3 = [5.4 19 14 19.6 19.6 5.4 5.4 0.4 0.4 5.4 5.4];
 len = length(x);
 x2store = [];
@@ -42,33 +42,46 @@ y2store = [];
 % x2store = [x2store x2comp];
 % y2store = [y2store y2comp];
 % end
+pstore = [];
+
+for n = 1:10
+    p = polyfit([x(n+1) x(n)],[y(n+1) y(n)],1);
+    pstore = [pstore ; p]
+end
+
+% for k = 0.2:0.2:50
+%     infill = -x + k
+%     func1 =
+
 
 figure
 hold on
 plot(x,y)
 plot(x2,y2)
 plot(x3,y3)
-xlim([-1 17])
-ylim([-1 22])
+plot(xref,yref)
+xlim([-1 21])
+ylim([-1 21])
 
-z = [];
 zstore = [];
-mult = 0
+mult = 0;
 for i = 0.2:0.2:10
     mult = 1 + mult;
     z = [];
     for j = 1:len
         zcomp = 0.2*mult;
-        z = [z zcomp]
+        z = [z zcomp];
     end
-zstore = [zstore ; z]
+zstore = [zstore ; z];
 end
 
 figure
 plot3(x,y,zstore,x2,y2,zstore,x3,y3,zstore)
-xlim([-1 17])
-ylim([-1 22])
+xlim([-1 21])
+ylim([-1 21])
 zlim([0 11])
+
+%% Bottom Layer
 
 
 
