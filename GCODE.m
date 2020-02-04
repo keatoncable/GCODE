@@ -48,7 +48,7 @@ hold on
 plot(x,y)
 plot(x2,y2)
 plot(x3,y3)
-xlim([-1 22])
+xlim([-1 17])
 ylim([-1 22])
 
 z = [];
@@ -66,7 +66,7 @@ end
 
 figure
 plot3(x,y,zstore,x2,y2,zstore,x3,y3,zstore)
-xlim([-1 22])
+xlim([-1 17])
 ylim([-1 22])
 zlim([0 11])
 
