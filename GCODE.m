@@ -45,6 +45,9 @@ y2store = [];
 pstore = [];
 
 for n = 1:10
+    if x(n+1)-x(n) == 0
+        p = 1;
+    end
     p = polyfit([x(n+1) x(n)],[y(n+1) y(n)],1);
     pstore = [pstore ; p]
 end
