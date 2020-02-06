@@ -11,12 +11,46 @@ clear
 clc
 close all
 
-x = [0 0 5 5 15 15 10 10 5 5 0];
-y = [5 20 15 20 20 5 5 0 0 5 5];
-x2 = [0.2 0.2 5.2 5.2 14.8 14.8 9.8 9.8 5.2 5.2 0.2];
-y2 = [5.2 19.5 14.5 19.8 19.8 5.2 5.2 0.2 0.2 5.2 5.2];
-x3 = [0.4 0.4 5.4 5.4 14.6 14.6 9.6 9.6 5.4 5.4 0.4];
-y3 = [5.4 19 14 19.6 19.6 5.4 5.4 0.4 0.4 5.4 5.4];
+noz = 0.4;
+
+x = [0.2 0.2 5.2 5.2 14.8 14.8 9.8 9.8 5.2 5.2 0.2];
+y = [5.2 19.8 14.8 19.8 19.8 5.2 5.2 0.2 0.2 5.2 5.2];
+
+xdiff = max(x)-min(x);
+ydiff = max(y)-min(y);
+
+x2 = [];
+y2 = [];
+x3 = [];
+y3 = [];
+
+
+for i = 1:length(x)
+   xref = x(i);
+   yref = y(i);
+   enter = 1;
+   if xref == 0.2 && yref == 19.8 || xref == 5.2 && yref == 14.8
+       x2 = [x2 xref+noz];
+       y2 = [y2 yref-0.8];
+       enter = 0;
+   elseif xref <= xdiff/2
+       x2 = [x2 xref+noz];
+   else
+       x2 = [x2 xref-noz];
+   end
+   if enter == 1
+        if yref <= ydiff/2
+            y2 = [y2 yref+noz];
+        else
+            y2 = [y2 yref-noz];
+        end
+   end
+end
+
+% x2 = [0.2 0.2 5.2 5.2 14.8 14.8 9.8 9.8 5.2 5.2 0.2];
+% y2 = [5.2 19.5 14.5 19.8 19.8 5.2 5.2 0.2 0.2 5.2 5.2];
+% x3 = [0.4 0.4 5.4 5.4 14.6 14.6 9.6 9.6 5.4 5.4 0.4];
+% y3 = [5.4 19 14 19.6 19.6 5.4 5.4 0.4 0.4 5.4 5.4];
 len = length(x);
 x2store = [];
 y2store = [];
@@ -83,7 +117,7 @@ figure
 hold on
 plot(x,y)
 plot(x2,y2)
-plot(x3,y3)
+%plot(x3,y3)
 %plot(xref,yref)
 xlim([-1 21])
 ylim([-1 21])
@@ -134,18 +168,21 @@ n = sqrt((5.4-0.4)^2+(14-19)^2)
 u = v/n
 pstore = [];
 
-dist = 5/13/sind(45);
+dist = 4.8/12/sind(45);
 
-for i = 1:13
+for i = 1:12
     p1 = [0.4 19] + dist*i*[u(1) u(2)]
     pstore = [pstore ; p1];
     if i == 1
-        plot([x1y1(1) p1(1)],[x1y1(2) p1(2)])
+        %plot([x1y1(1) p1(1)],[x1y1(2) p1(2)])
     else
-       plot([pstore(i-1,1) p1(1)],[pstore(i-1,2) p1(2)]) 
+      % plot([pstore(i-1,1) p1(1)],[pstore(i-1,2) p1(2)]) 
     end
 end
 
-% for i= 1:length(vec1)-1
-%     plot([vec1(i+1) vec1(1)],[vec1(1) vec1(i+1)])
-% end
+line = 5.4;
+
+for i = 1:12
+     plot([pstore(i,1) pstore(i,1)],[line pstore(i,2)])
+ end
+
