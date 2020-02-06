@@ -132,9 +132,19 @@ x2y2 = [5.4 14];
 v = x2y2 - x1y1
 n = sqrt((5.4-0.4)^2+(14-19)^2)
 u = v/n
+pstore = [];
 
-p1 = [0.4 19] + 0.565685*[u(1) u(2)]
-plot([x1y1(1) p1(1)],[x1y1(2) p1(2)])
+dist = 5/13/sind(45);
+
+for i = 1:13
+    p1 = [0.4 19] + dist*i*[u(1) u(2)]
+    pstore = [pstore ; p1];
+    if i == 1
+        plot([x1y1(1) p1(1)],[x1y1(2) p1(2)])
+    else
+       plot([pstore(i-1,1) p1(1)],[pstore(i-1,2) p1(2)]) 
+    end
+end
 
 % for i= 1:length(vec1)-1
 %     plot([vec1(i+1) vec1(1)],[vec1(1) vec1(i+1)])
