@@ -161,17 +161,18 @@ vec4 = linspace(0.4,5.4,round((5.4-0.4)/0.4));%[0.4:0.4:5.4];
 % b = 40;
 % vec2 = m.*vec1 +b;
 
-x1y1 = [0.4 19];
-x2y2 = [5.4 14];
+x1y1 = [1 19];
+x2y2 = [5.6 14];
 v = x2y2 - x1y1
-n = sqrt((5.4-0.4)^2+(14-19)^2)
+n = sqrt((x1y1(1)-x2y2(1))^2+((x1y1(2)-x2y2(2))^2))
 u = v/n
 pstore = [];
 
-dist = 4.8/12/sind(45);
+dist = (x2y2(1)-x1y1(1))/12/sind(45);
+layer = 0.2;
 
 for i = 1:12
-    p1 = [0.4 19] + dist*i*[u(1) u(2)]
+    p1 = [x1y1(1) x2y2(2)] + dist*i*[u(1) u(2)]
     pstore = [pstore ; p1];
     if i == 1
         %plot([x1y1(1) p1(1)],[x1y1(2) p1(2)])
@@ -180,9 +181,35 @@ for i = 1:12
     end
 end
 
-line = 5.4;
+line = x2y2(1);
 
 for i = 1:12
      plot([pstore(i,1) pstore(i,1)],[line pstore(i,2)])
- end
+end
 
+x1 = 5.8;
+x2 = 9.6;
+y1 = 0.6;
+y2 = 19.4;
+ numlines = (9.6-5.8)/0.4;
+ dist2 = (x2-x1)/ceil(numlines);
+ xsto1 = x1:dist2:x2;
+ 
+ for i = 1:ceil(numlines)
+     plot([xsto1(i) xsto1(i)],[y1 y2])
+ end
+ 
+x12 = 9.6;
+x22 = 14.6;
+y12 = 5.6;
+y22 = 19.4;
+ numlines2 = (x22-x12)/0.4;
+ dist3 = (x22-x12)/ceil(numlines2);
+ xsto2 = x12:dist3:x22;
+ 
+ for i = 1:ceil(numlines2)
+     plot([xsto2(i) xsto2(i)],[y12 y22])
+ end
+ 
+ 
+ 
