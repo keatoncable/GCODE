@@ -59,16 +59,6 @@ for i = 1:length(x)
    end
 end
 
-pstore = [];
-
-for n = 1:10
-    if x(n+1)-x(n) == 0
-        p = 1;
-    end
-    p = polyfit([x(n+1) x(n)],[y(n+1) y(n)],1);
-    pstore = [pstore ; p]
-end
-
 % figure
 % plot3(x,y,zstore,x2,y2,zstore,x3,y3,zstore)
 % xlim([-1 21])
@@ -93,7 +83,11 @@ n = sqrt((x1y1(1)-x2y2(1))^2+((x1y1(2)-x2y2(2))^2))
 u = v/n
 pstore = [];
 
+infx1 = [];
+infy1 = [];
+
 numlines0 = round((x2y2(1)-x1y1(1))/0.4);
+infline1 = round(numlines0*0.3);
 dist = (x2y2(1)-x1y1(1))/numlines0/sind(45);
 layer = 0.2;
 
@@ -111,6 +105,7 @@ line = x2y2(1)+0.2;
 
 for i = 1:numlines0
      plot([pstore(i,1) pstore(i,1)],[line pstore(i,2)])
+     
 end
 
 x1 = 6;
@@ -204,3 +199,43 @@ line = x1y1(1)+0.2;
 for i = 1:numlines0
      plot([line pstore(i,1)-0.2],[pstore(i,2) pstore(i,2)])
 end
+
+%% Infill
+
+for i = 1:length(x)
+   xref = x(i);
+   yref = y(i);
+   enter = 1;
+   if xref == 0.2 && yref == 19.8 || xref == 5.2 && yref == 14.8
+       x2 = [x2 xref+noz];
+       y2 = [y2 yref-0.8];
+       enter = 0;
+   elseif xref <= xdiff/2
+       x2 = [x2 xref+noz];
+   else
+       x2 = [x2 xref-noz];
+   end
+   if enter == 1
+        if yref <= ydiff/2
+            y2 = [y2 yref+noz];
+        else
+            y2 = [y2 yref-noz];
+        end
+   end
+end
+
+figure
+hold on
+plot(x,y)
+plot(x2,y2)
+%plot(x3,y3)
+%plot(xref,yref)
+xlim([-1 21])
+ylim([-1 21])
+
+tot = (9.022-6)/4;
+infill = tot*.3
+
+
+
+
