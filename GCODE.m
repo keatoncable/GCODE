@@ -24,6 +24,18 @@ y2 = [];
 x3 = [];
 y3 = [];
 
+zstore = [];
+mult = 0;
+for i = 0.2:0.2:10
+    mult = 1 + mult;
+    z = [];
+    for j = 1:length(0.2:0.2:10)
+        zcomp = 0.2*mult;
+        z = [z zcomp];
+    end
+zstore = [zstore ; z];
+end
+
 
 for i = 1:length(x)
    xref = x(i);
@@ -47,37 +59,6 @@ for i = 1:length(x)
    end
 end
 
-% x2 = [0.2 0.2 5.2 5.2 14.8 14.8 9.8 9.8 5.2 5.2 0.2];
-% y2 = [5.2 19.5 14.5 19.8 19.8 5.2 5.2 0.2 0.2 5.2 5.2];
-% x3 = [0.4 0.4 5.4 5.4 14.6 14.6 9.6 9.6 5.4 5.4 0.4];
-% y3 = [5.4 19 14 19.6 19.6 5.4 5.4 0.4 0.4 5.4 5.4];
-len = length(x);
-x2store = [];
-y2store = [];
-
-% for i = 1:len
-%     xcomp = x(i);
-%     ycomp = y(i);
-%     nozzle = 0.2;
-% 
-%     if xcomp - nozzle < min(x)
-%         x2comp = xcomp + nozzle;
-%     elseif xcomp + nozzle > max(x)
-%         x2comp = xcomp - nozzle;
-%     else
-%         x2comp = xcomp + nozzle;
-%     end
-%     
-%     if ycomp - nozzle < min(y)
-%         y2comp = ycomp + nozzle;
-%     elseif ycomp + nozzle > max(y)
-%         y2comp = ycomp - nozzle;
-%     else
-%         y2comp = ycomp + nozzle;
-%     end
-% x2store = [x2store x2comp];
-% y2store = [y2store y2comp];
-% end
 pstore = [];
 
 for n = 1:10
@@ -86,25 +67,6 @@ for n = 1:10
     end
     p = polyfit([x(n+1) x(n)],[y(n+1) y(n)],1);
     pstore = [pstore ; p]
-end
-
-% for k = 0.2:0.2:50
-%     infill = -x + k
-%     func1 =
-
-
-
-
-zstore = [];
-mult = 0;
-for i = 0.2:0.2:10
-    mult = 1 + mult;
-    z = [];
-    for j = 1:len
-        zcomp = 0.2*mult;
-        z = [z zcomp];
-    end
-zstore = [zstore ; z];
 end
 
 % figure
@@ -122,87 +84,51 @@ plot(x2,y2)
 xlim([-1 21])
 ylim([-1 21])
 
+% FIRST BOTTOM LAYER
 
-% xvec = min(x2):0.2:max(x2)
-% yvec = min(y2):0.2:max(y2)
-% figure
-% hold on
-% for i = 1:73
-%     plot(xvec(i+1),yvec(i+1),xvec(i),yvec(i))
-% end
-
-vec1 = linspace(0.4,5.4,round(5/0.4));%[0.4:0.4:5.4];
-vec2 = linspace(5.4,10.4,round(5/0.4));%[5.4:0.4:10.4];
-
-vec3 = linspace(5.4,9.6,round((9.6-5.4)/0.4));%[5.4:0.4:9.6];
-vec4 = linspace(0.4,5.4,round((5.4-0.4)/0.4));%[0.4:0.4:5.4];
-
-% vec5 = [5.4:0.4:9.6];
-% vec6 = [0.4:0.4:5.6];
-% 
-% for i = 1:length(vec1)-1
-%     plot([vec1(i+1) vec1(1)],[vec2(1) vec2(i+1)])
-% end
-% 
-% for i = 1:length(vec3)-1
-%     plot([vec3(i+1) vec3(1)],[vec4(1) vec4(i+1)])
-% end
-% 
-% for i = 1:length(vec5)-1
-%     plot([vec5(i+1) vec5(1)],[vec6(1) vec6(i+1)])
-% end
-% % plot([0.4 0.2],[5.2 5.4])
-% 
-% startx = 0.8;
-% starty = 5.8;
-
-% vec1 = [0.4:0.4:5.4];
-% m = (14-19)/(5.4-0.4)
-% b = 40;
-% vec2 = m.*vec1 +b;
-
-x1y1 = [0.6 19];
-x2y2 = [5.6 14];
+x1y1 = [0.6 19-0.2];
+x2y2 = [5.6 14-0.2];
 v = x2y2 - x1y1
 n = sqrt((x1y1(1)-x2y2(1))^2+((x1y1(2)-x2y2(2))^2))
 u = v/n
 pstore = [];
 
-dist = (x2y2(1)-x1y1(1))/12/sind(45);
+numlines0 = round((x2y2(1)-x1y1(1))/0.4);
+dist = (x2y2(1)-x1y1(1))/numlines0/sind(45);
 layer = 0.2;
 
-for i = 1:12
+for i = 1:numlines0
     p1 = [x1y1(1) x1y1(2)] + dist*i*[u(1) u(2)]
     pstore = [pstore ; p1];
     if i == 1
-        %plot([x1y1(1) p1(1)],[x1y1(2) p1(2)])
+       %plot([x1y1(1) p1(1)],[x1y1(2) p1(2)])
     else
-      %plot([pstore(i-1,1) p1(1)],[pstore(i-1,2) p1(2)]) 
+       %plot([pstore(i-1,1) p1(1)],[pstore(i-1,2) p1(2)]) 
     end
 end
 
-line = x2y2(1);
+line = x2y2(1)+0.2;
 
-for i = 1:12
+for i = 1:numlines0
      plot([pstore(i,1) pstore(i,1)],[line pstore(i,2)])
 end
 
 x1 = 6;
 x2 = 9.4;
-y1 = 0.6;
-y2 = 19.4;
+y1 = 0.8;
+y2 = 19.2;
  numlines = (9.6-6)/0.4;
- dist2 = (x2-x1)/ceil(numlines);
+ dist2 = (x2-x1)/round(numlines);
  xsto1 = x1:dist2:x2;
  
- for i = 1:ceil(numlines)
+ for i = 1:round(numlines)
      plot([xsto1(i) xsto1(i)],[y1 y2])
  end
  
 x12 = 9.4;
 x22 = 14.4;
-y12 = 5.6;
-y22 = 19.4;
+y12 = 5.8;
+y22 = 19.2;
  numlines2 = (x22-x12)/0.4;
  dist3 = (x22-x12)/round(numlines2);
  xsto2 = x12:dist3:x22;
@@ -211,38 +137,13 @@ y22 = 19.4;
      plot([xsto2(i) xsto2(i)],[y12 y22])
  end
  
- %second bottom layer
+ %% SECOND BOTTOM LAYER
  
-x1y1 = [0.6 19];
-x2y2 = [5.6 14];
-v = x2y2 - x1y1
-n = sqrt((x1y1(1)-x2y2(1))^2+((x1y1(2)-x2y2(2))^2))
-u = v/n
-pstore = [];
-
-dist = (x2y2(1)-x1y1(1))/12/sind(45);
-layer = 0.2;
-
-for i = 1:12
-    p1 = [x1y1(1) x1y1(2)] + dist*i*[u(1) u(2)]
-    pstore = [pstore ; p1];
-    if i == 1
-        %plot([x1y1(1) p1(1)],[x1y1(2) p1(2)])
-    else
-      %plot([pstore(i-1,1) p1(1)],[pstore(i-1,2) p1(2)]) 
-    end
-end
-
-line = x2y2(1);
-
-for i = 1:12
-     plot([pstore(i,1) pstore(i,1)],[line pstore(i,2)])
-end 
  
-x12 = 5.6;
-x22 = 9.4;
-y12 = 0.6;
-y22 = 5.6;
+x12 = 5.8;
+x22 = 9.2;
+y12 = 1;
+y22 = 6;
  numlines2 = (y22-y12)/0.4;
  dist3 = (y22-y12)/round(numlines2);
  ysto2 = y12:dist3:y22;
@@ -251,21 +152,9 @@ y22 = 5.6;
      plot([x12 x22],[ysto2(i) ysto2(i)])
  end
  
- x12 = 5.6;
-x22 = 9.4;
-y12 = 0.6;
-y22 = 5.6;
- numlines2 = (y22-y12)/0.4;
- dist3 = (y22-y12)/round(numlines2);
- ysto2 = y12:dist3:y22;
- 
- for i = 1:round(numlines2)
-     plot([x12 x22],[ysto2(i) ysto2(i)])
- end
- 
-x12 = 0.6;
-x22 = 14.4;
-y12 = 5.6;
+x12 = 0.8;
+x22 = 14.2;
+y12 = 6;
 y22 = 14;
  numlines2 = (y22-y12)/0.4;
  dist3 = (y22-y12)/round(numlines2);
@@ -287,30 +176,29 @@ y22 = 19.4;
      plot([x12 x22],[ysto2(i) ysto2(i)])
  end
  
-x1y1 = [0.6 19];
-x2y2 = [5.6 14];
-v = x2y2 - x1y1
-n = sqrt((x1y1(1)-x2y2(1))^2+((x1y1(2)-x2y2(2))^2))
-u = v/n
-pstore = [];
-
-dist = (x2y2(1)-x1y1(1))/12/sind(45);
-layer = 0.2;
-
-for i = 1:12
-    p1 = [x1y1(1) x1y1(2)] + dist*i*[u(1) u(2)]
-    pstore = [pstore ; p1];
-    if i == 1
-        %plot([x1y1(1) p1(1)],[x1y1(2) p1(2)])
-    else
-      %plot([pstore(i-1,1) p1(1)],[pstore(i-1,2) p1(2)]) 
-    end
-end
-
-line = 0.6;
-
-for i = 1:12
-     plot([line pstore(i,2)], [pstore(i,1) pstore(i,1)])
-end 
- 
+% x1y1 = [0.6 19];
+% x2y2 = [5.6 14];
+% v = x2y2 - x1y1
+% n = sqrt((x1y1(1)-x2y2(1))^2+((x1y1(2)-x2y2(2))^2))
+% u = v/n
+% pstore2 = [];
+% 
+% dist = (x2y2(1)-x1y1(1))/12/sind(45);
+% layer = 0.2;
+% 
+% for i = 1:12
+%     p1 = [x2y2(1) x2y2(2)] + dist*i*[u(1) u(2)]
+%     pstore2 = [pstore2 ; p1];
+%     if i == 1
+%         %plot([x1y1(1) p1(1)],[x1y1(2) p1(2)])
+%     else
+%       %plot([pstore(i-1,1) p1(1)],[pstore(i-1,2) p1(2)]) 
+%     end
+% end
+% 
+% line = 0.6;
+% 
+% for i = 1:12
+%      plot([line pstore2(i,2)], [x2y2(1) x2y2(2)])
+% end 
  
