@@ -164,8 +164,8 @@ y22 = 14;
      plot([x12 x22],[ysto2(i) ysto2(i)])
  end
  
-x12 = 5.6;
-x22 = 14.4;
+x12 = 5.8;
+x22 = 14.2;
 y12 = 14;
 y22 = 19.4;
  numlines2 = (y22-y12)/0.4;
@@ -176,29 +176,31 @@ y22 = 19.4;
      plot([x12 x22],[ysto2(i) ysto2(i)])
  end
  
-% x1y1 = [0.6 19];
-% x2y2 = [5.6 14];
-% v = x2y2 - x1y1
-% n = sqrt((x1y1(1)-x2y2(1))^2+((x1y1(2)-x2y2(2))^2))
-% u = v/n
-% pstore2 = [];
-% 
-% dist = (x2y2(1)-x1y1(1))/12/sind(45);
-% layer = 0.2;
-% 
-% for i = 1:12
-%     p1 = [x2y2(1) x2y2(2)] + dist*i*[u(1) u(2)]
-%     pstore2 = [pstore2 ; p1];
-%     if i == 1
-%         %plot([x1y1(1) p1(1)],[x1y1(2) p1(2)])
-%     else
-%       %plot([pstore(i-1,1) p1(1)],[pstore(i-1,2) p1(2)]) 
-%     end
-% end
-% 
-% line = 0.6;
-% 
-% for i = 1:12
-%      plot([line pstore2(i,2)], [x2y2(1) x2y2(2)])
-% end 
- 
+x1y1 = [0.6 19-0.2];
+x2y2 = [5.6 14-0.2];
+v = x2y2 - x1y1
+n = sqrt((x1y1(1)-x2y2(1))^2+((x1y1(2)-x2y2(2))^2))
+u = v/n
+pstore = [];
+
+numlines0 = abs(round((x2y2(2)-x1y1(2))/0.4));
+dist = (x2y2(1)-x1y1(1))/numlines0/sind(45);
+layer = 0.2;
+
+xn1 = [1 14]
+
+for i = 1:numlines0
+    p1 = [x1y1(1) x1y1(2)+0.2] + dist*i*[u(1) u(2)]
+    pstore = [pstore ; p1];
+    if i == 1
+       %plot([x1y1(1) p1(1)],[x1y1(2) p1(2)])
+    else
+       %plot([pstore(i-1,1) p1(1)],[pstore(i-1,2) p1(2)]) 
+    end
+end
+
+line = x1y1(1)+0.2;
+
+for i = 1:numlines0
+     plot([line pstore(i,1)-0.2],[pstore(i,2) pstore(i,2)])
+end
