@@ -44,7 +44,10 @@ clear
 clc
 close all
 
-gsto = {};
+gsto = {'G1 E-0.80000 F2100.00000';
+        'G1 Z0.600 F10800.000';
+        ';AFTER_LAYER_CHANGE';
+        ';0.2';};
 
 zstore = [];
 mult = 0;
@@ -58,15 +61,21 @@ for i = 0.2:0.2:10
 zstore = [zstore ; zcomp];
 end
 
+figure 
 
 
 for q = 1:length(zstore)
+    hold on
     noz = 0.4;
     zcoord = zstore(q);
-    x = [0.2 0.2 5.2 5.2 14.8 14.8 9.8 9.8 5.2 5.2 0.2]+50;
-    y = [5.2 19.8 14.8 19.8 19.8 5.2 5.2 0.2 0.2 5.2 5.2]+50;
-    
-    
+    x = [0.2 0.2 5.2 5.2 14.8 14.8 9.8 9.8 5.2 5.2 0.2];
+    y = [5.2 19.8 14.8 19.8 19.8 5.2 5.2 0.2 0.2 5.2 5.2];
+   
+    for l = 1:length(x)
+        e = sum(sqrt(diff(x.^2+diff(y(1:end-1).^2))))
+        save = sprintf('G1 X%.3f Y%.3f E%.5f',x(l),y(l),e);
+        %sto1 = {'
+    end
     
     xdiff = max(x)-min(x);
     ydiff = max(y)-min(y);
@@ -97,7 +106,8 @@ for q = 1:length(zstore)
             x2 = [x2 xref+noz];
             y2 = [y2 yref-0.8];
             e = sum(sqrt(diff(x2).^2+diff(y2).^2));
-            code = sprintf('G1 X%.3f Y%.3f E%.5f',x2(2),y2(2),e);
+            code1 = sprintf('G1 X%.3f Y%.3f E%.5f',x2(2),y2(2),e);
+            
             enter = 0;
         elseif xref <= xdiff/2
             x2 = [x2 xref+noz];
@@ -119,19 +129,17 @@ for q = 1:length(zstore)
     % ylim([-1 21])
     % zlim([0 11])
     
-    figure
-    hold on
     plot(x,y)
     plot(x2,y2)
     %plot(x3,y3)
     %plot(xref,yref)
-    xlim([-1 121])
-    ylim([-1 121])
+    xlim([-1 21])
+    ylim([-1 21])
     
     % FIRST BOTTOM LAYER
     
-    x1y1 = [0.6 19-0.2]+30;
-    x2y2 = [5.6 14-0.2]+30;
+    x1y1 = [0.6 19-0.2];
+    x2y2 = [5.6 14-0.2];
     v = x2y2 - x1y1;
     n = sqrt((x1y1(1)-x2y2(1))^2+((x1y1(2)-x2y2(2))^2));
     u = v/n;
@@ -213,10 +221,10 @@ for q = 1:length(zstore)
         plot([x12 x22],[ysto2(i) ysto2(i)])
     end
     
-    x12 = 5.8+30;
-    x22 = 14.2+30;
-    y12 = 14+30;
-    y22 = 19.4+30;
+    x12 = 5.8
+    x22 = 14.2;
+    y12 = 14;
+    y22 = 19.4;
     numlines2 = (y22-y12)/0.4;
     dist3 = (y22-y12)/round(numlines2);
     ysto2 = y12:dist3:y22;
@@ -225,8 +233,8 @@ for q = 1:length(zstore)
         plot([x12 x22],[ysto2(i) ysto2(i)])
     end
     
-    x1y1 = [0.6 19-0.2]+30;
-    x2y2 = [5.6 14-0.2]+30;
+    x1y1 = [0.6 19-0.2];
+    x2y2 = [5.6 14-0.2];
     v = x2y2 - x1y1;
     n = sqrt((x1y1(1)-x2y2(1))^2+((x1y1(2)-x2y2(2))^2));
     u = v/n;
@@ -236,7 +244,7 @@ for q = 1:length(zstore)
     dist = (x2y2(1)-x1y1(1))/numlines0/sind(45);
     layer = 0.2;
     
-    xn1 = [1 14]+30;
+    xn1 = [1 14];
     
     for i = 1:numlines0
         p1 = [x1y1(1) x1y1(2)+0.2] + dist*i*[u(1) u(2)];
