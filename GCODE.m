@@ -44,10 +44,12 @@ clear
 clc
 close all
 
-gsto = ['G1 E-0.80000 F2100.00000';
-        'G1 Z0.600 F10800.000';
-        ';AFTER_LAYER_CHANGE';
-        ';0.2';];
+gsto = ["G1 E-0.80000 F2100.00000";
+        "G1 Z0.600 F10800.000";
+        %"G1 X100 Y100";
+        %"G92 X0 Y0";
+        ";AFTER_LAYER_CHANGE";
+        ";0.2";];
 
 zstore = [];
 mult = 0;
@@ -70,6 +72,9 @@ for q = 1:length(zstore)
     zcoord = zstore(q);
     x = [0.2 0.2 5.2 5.2 14.8 14.8 9.8 9.8 5.2 5.2 0.2];
     y = [5.2 19.8 14.8 19.8 19.8 5.2 5.2 0.2 0.2 5.2 5.2];
+    
+    height = sprintf("G1 Z%.3f",zcoord)
+    gsto = [gsto; height ;"G1 X0.2 Y5.2"];
     
     sto1 = [];
    
@@ -104,19 +109,7 @@ for q = 1:length(zstore)
     y2 = [];
     x3 = [];
     y3 = [];
-    
-    zstore = [];
-    mult = 0;
-    for i = 0.2:0.2:10
-        mult = 1 + mult;
-        z = [];
-        for j = 1:length(0.2:0.2:10)
-            zcomp = 0.2*mult;
-            z = [z zcomp];
-        end
-        zstore = [zstore ; z];
-    end
-    
+    sto1 = [];
     
     for i = 1:length(x)
         xref = x(i);
@@ -125,9 +118,6 @@ for q = 1:length(zstore)
         if xref == 0.2 && yref == 19.8 || xref == 5.2 && yref == 14.8
             x2 = [x2 xref+noz];
             y2 = [y2 yref-0.8];
-            e = sum(sqrt(diff(x2).^2+diff(y2).^2));
-            code1 = sprintf('G1 X%.3f Y%.3f E%.5f',x2(2),y2(2),e);
-            
             enter = 0;
         elseif xref <= xdiff/2
             x2 = [x2 xref+noz];
@@ -141,7 +131,26 @@ for q = 1:length(zstore)
                 y2 = [y2 yref-noz];
             end
         end
+        
+        if diff(x2) == 0
+            e = abs(diff(y2));
+        elseif diff(y2) == 0
+            e = abs(diff(x2));
+        else
+            e = sum(sqrt(diff(x2).^2+diff(y2).^2));
+        end
+        
+        if i == 1
+            save1 = string(sprintf('G1 X%.3f Y%.3f',x2(1),y2(1)));
+            sto1 = [sto1 ; save1];
+            
+        else
+            save = string(sprintf('G1 X%.3f Y%.3f E%.5f',x2(i),y2(i),e));
+            sto1 = [sto1 ; save];
+        end
     end
+    
+    gsto = [gsto ; sto1];
     
     % figure
     % plot3(x,y,zstore,x2,y2,zstore,x3,y3,zstore)
@@ -174,7 +183,7 @@ for q = 1:length(zstore)
     layer = 0.2;
     
     for i = 1:numlines0
-        p1 = [x1y1(1) x1y1(2)] + dist*i*[u(1) u(2)]
+        p1 = [x1y1(1) x1y1(2)] + dist*i*[u(1) u(2)];
         pstore = [pstore ; p1];
         if i == 1
             %plot([x1y1(1) p1(1)],[x1y1(2) p1(2)])
@@ -185,10 +194,26 @@ for q = 1:length(zstore)
     
     line = x2y2(1)+0.2;
     
+    sto1 = [];
+    
     for i = 1:numlines0
         plot([pstore(i,1) pstore(i,1)],[line pstore(i,2)])
-        
+        e = pstore(i,2)-line;
+        if i == 1
+           lines = sprintf("G1 X%.3f Y%.3f",pstore(i,1),line) 
+           sto1 = [sto1 ; lines];
+        elseif mod(i,2) == 0
+            lines = sprintf("G1 X%.3f Y%.3f E%.5f",pstore(i-1,1),pstore(i,2),e)
+            next = sprintf("G1 X%.3f Y%.3f",pstore(i,1),pstore(i,2))
+            sto1 = [sto1 ; lines ; next];
+        else
+            lines = sprintf("G1 X%.3f Y%.3f E%.5f",pstore(i-1,1),line,e)
+            next = sprintf("G1 X%.3f Y%.3f",pstore(i,1),line)
+            sto1 = [sto1 ; lines ; next];
+        end
     end
+        
+    gsto = [gsto ; sto1];
     
     x1 = 6;
     x2 = 9.4;
@@ -200,7 +225,22 @@ for q = 1:length(zstore)
     
     for i = 1:round(numlines)
         plot([xsto1(i) xsto1(i)],[y1 y2])
+        e = y2-y1;
+        if i == 1
+           lines = sprintf("G1 X%.3f Y%.3f",xsto1(i),y1) 
+           sto1 = [sto1 ; lines];
+        elseif mod(i,2) == 0
+            lines = sprintf("G1 X%.3f Y%.3f E%.5f",xsto1(i-1),y1,e)
+            next = sprintf("G1 X%.3f Y%.3f",xsto1(i),y2)
+            sto1 = [sto1 ; lines ; next];
+        else
+            lines = sprintf("G1 X%.3f Y%.3f E%.5f",xsto1(i-1),y1,e)
+            next = sprintf("G1 X%.3f Y%.3f",xsto1(i),y2)
+            sto1 = [sto1 ; lines ; next];
+        end
     end
+    
+        gsto = [gsto ; sto1];
     
     x12 = 9.4;
     x22 = 14.4;
