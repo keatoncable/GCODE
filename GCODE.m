@@ -71,9 +71,11 @@ for q = 1:length(zstore)
     x = [0.2 0.2 5.2 5.2 14.8 14.8 9.8 9.8 5.2 5.2 0.2];
     y = [5.2 19.8 14.8 19.8 19.8 5.2 5.2 0.2 0.2 5.2 5.2];
    
-    for l = 1:length(x)
-        e = sum(sqrt(diff(x.^2+diff(y(1:end-1).^2))))
-        save = sprintf('G1 X%.3f Y%.3f E%.5f',x(l),y(l),e);
+    for w = 2:length(x)
+        x2 = [x(w-1) x(w)];
+        y2 = [y(w-1) y(w)];
+        e = sum(sqrt(diff(x2.^2+diff(y2.^2))))
+        save = sprintf('G1 X%.3f Y%.3f E%.5f',x(w),y(w),e);
         %sto1 = {'
     end
     
