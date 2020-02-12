@@ -44,10 +44,10 @@ clear
 clc
 close all
 
-gsto = {'G1 E-0.80000 F2100.00000';
+gsto = ['G1 E-0.80000 F2100.00000';
         'G1 Z0.600 F10800.000';
         ';AFTER_LAYER_CHANGE';
-        ';0.2';};
+        ';0.2';];
 
 zstore = [];
 mult = 0;
@@ -70,14 +70,32 @@ for q = 1:length(zstore)
     zcoord = zstore(q);
     x = [0.2 0.2 5.2 5.2 14.8 14.8 9.8 9.8 5.2 5.2 0.2];
     y = [5.2 19.8 14.8 19.8 19.8 5.2 5.2 0.2 0.2 5.2 5.2];
+    
+    sto1 = [];
    
-    for w = 2:length(x)
+    for w = 2:(length(x))
         x2 = [x(w-1) x(w)];
         y2 = [y(w-1) y(w)];
-        e = sum(sqrt(diff(x2.^2+diff(y2.^2))))
-        save = sprintf('G1 X%.3f Y%.3f E%.5f',x(w),y(w),e);
-        %sto1 = {'
+        if diff(x2) == 0
+            e = abs(diff(y2));
+        elseif diff(y2) == 0
+            e = abs(diff(x2));
+        else
+            e = sum(sqrt(diff(x2).^2+diff(y2).^2));
+        end
+        
+        if w == 2
+            save1 = string(sprintf('G1 X%.3f Y%.3f E%.5f',x(1),y(1),e));
+            save2 = string(sprintf('G1 X%.3f Y%.3f E%.5f',x(w),y(w),e));
+            sto1 = [sto1 ; save1; save2];
+            
+        else
+            save = string(sprintf('G1 X%.3f Y%.3f E%.5f',x(w),y(w),e));
+            sto1 = [sto1 ; save];
+        end
     end
+    
+    gsto = [gsto ; sto1];
     
     xdiff = max(x)-min(x);
     ydiff = max(y)-min(y);
@@ -300,8 +318,7 @@ for q = 1:length(zstore)
 %     xlim([-1 21])
 %     ylim([-1 21])
     
-    
-    
+
     for j = 3:2:11
         x2 = [];
         y2 = [];
