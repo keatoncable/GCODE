@@ -64,14 +64,14 @@ end
 figure 
 
 
-for q = 3:3%length(zstore)
+for q = 1:length(zstore)
     hold on
     noz = 0.4;
     zcoord = zstore(q);
     x = [0.2 0.2 5.2 5.2 14.8 14.8 9.8 9.8 5.2 5.2 0.2];
     y = [5.2 19.8 14.8 19.8 19.8 5.2 5.2 0.2 0.2 5.2 5.2];
     
-    height = sprintf("G1 Z%.3f",zcoord)
+    height = sprintf("G1 Z%.3f",zcoord);
     gsto = [gsto; height ;"G1 X0.2 Y5.2"];
     
     sto1 = [];
@@ -520,7 +520,7 @@ elseif q == 2 || q == 49
                 if w == 2
                     save1 = string(sprintf('G1 X%.3f Y%.3f',x2(1),y2(1)));
                     save2 = string(sprintf('G1 X%.3f Y%.3f E%.5f',x2(w),y2(w),e));
-                    sto1 = [sto1 ; save1];% save2];
+                    sto1 = [sto1 ; save1; save2];
                     
                 else
                     save = string(sprintf('G1 X%.3f Y%.3f E%.5f',x2(w),y2(w),e));
@@ -545,7 +545,7 @@ elseif q == 2 || q == 49
                 if w == 2
                     save1 = string(sprintf('G1 X%.3f Y%.3f',x2(1),y2(1)));
                     save2 = string(sprintf('G1 X%.3f Y%.3f E%.5f',x2(w),y2(w),e));
-                    sto1 = [sto1 ; save1;save2];
+                    sto1 = [sto1 ; save1; save2];
                     
                 else
                     save = string(sprintf('G1 X%.3f Y%.3f E%.5f',x2(w),y2(w),e));
@@ -580,7 +580,7 @@ elseif q == 2 || q == 49
             end
             break
         end
-        
+        sto1 = [];
         for i = 1:length(x)
             xref = x(i);
             yref = y(i);
