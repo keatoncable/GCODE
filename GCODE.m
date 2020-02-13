@@ -198,22 +198,40 @@ for q = 1:length(zstore)
     
     for i = i:numlines0
         plot([pstore(i,1) pstore(i,1)],[line pstore(i,2)])
-%         e = pstore(i,2)-line;
+        e = pstore(i,2)-line;
+        
 %         if i == 1
-%            lines = sprintf("G1 X%.3f Y%.3f",pstore(i,1),pstore(i,2)) 
+%            lines = sprintf("G1 X%.3f Y%.3f",xsto1(i),y1) 
 %            sto1 = [sto1 ; lines];
-%         elseif i == numlines0
-%            lines = sprintf("G1 X%.3f Y%.3f E%.5f",pstore(i,1),line,e)
-%            sto1 = [sto1 ; lines]; 
+%         elseif i == 1:round(numlines0)
+%             lines = sprintf("G1 X%.3f Y%.3f",xsto1(i),y1) 
+%            sto1 = [sto1 ; lines];
 %         elseif mod(i,2) == 0
-%             lines = sprintf("G1 X%.3f Y%.3f E%.5f",pstore(i-1,1),pstore(i,2),e)
-%             next = sprintf("G1 X%.3f Y%.3f",pstore(i,1),pstore(i,2))
+%             lines = sprintf("G1 X%.3f Y%.3f E%.5f",xsto1(i-1),y2,e)
+%             next = sprintf("G1 X%.3f Y%.3f",xsto1(i),y2)
 %             sto1 = [sto1 ; lines ; next];
 %         else
-%             lines = sprintf("G1 X%.3f Y%.3f E%.5f",pstore(i-1,1),line,e)
-%             next = sprintf("G1 X%.3f Y%.3f",pstore(i,1),line)
+%             lines = sprintf("G1 X%.3f Y%.3f E%.5f",xsto1(i-1),y1,e)
+%             next = sprintf("G1 X%.3f Y%.3f",xsto1(i),y1)
 %             sto1 = [sto1 ; lines ; next];
 %         end
+        
+        
+        if i == 1
+           lines = sprintf("G1 X%.3f Y%.3f",pstore(i,1),pstore(i,2)) 
+           sto1 = [sto1 ; lines];
+        elseif i == numlines0
+           lines = sprintf("G1 X%.3f Y%.3f",pstore(i,1),line)
+           sto1 = [sto1 ; lines]; 
+        elseif mod(i,2) == 0
+            lines = sprintf("G1 X%.3f Y%.3f E%.5f",pstore(i-1,1),pstore(i,2),e)
+            next = sprintf("G1 X%.3f Y%.3f",pstore(i,1),pstore(i,2))
+            sto1 = [sto1 ; lines ; next];
+        else
+            lines = sprintf("G1 X%.3f Y%.3f E%.5f",pstore(i-1,1),line,e)
+            next = sprintf("G1 X%.3f Y%.3f",pstore(i,1),line)
+            sto1 = [sto1 ; lines ; next];
+        end
     end
      
         
@@ -247,7 +265,7 @@ for q = 1:length(zstore)
         end
     end
     
-        gsto = [gsto ; sto1];
+     gsto = [gsto ; sto1];
     
     x12 = 9.4;
     x22 = 14.4;
