@@ -44,8 +44,8 @@ close all
 
 gsto = ["G1 E-0.80000 F2100.00000";
         "G1 Z0.600 F10800.000";
-        %"G1 X100 Y100";
-        %"G92 X0 Y0";
+        "G1 X100 Y100";
+        "G92 X0 Y0";
         ";AFTER_LAYER_CHANGE";
         ";0.2";];
 
@@ -64,7 +64,7 @@ end
 figure 
 
 
-for q = 1:length(zstore)
+for q = 3:3%length(zstore)
     hold on
     noz = 0.4;
     zcoord = zstore(q);
@@ -88,7 +88,7 @@ for q = 1:length(zstore)
         end
         
         if w == 2
-            save1 = string(sprintf('G1 X%.3f Y%.3f E%.5f',x(1),y(1),e));
+            save1 = string(sprintf('G1 X%.3f Y%.3f',x(1),y(1)));
             save2 = string(sprintf('G1 X%.3f Y%.3f E%.5f',x(w),y(w),e));
             sto1 = [sto1 ; save1; save2];
             
@@ -520,7 +520,7 @@ elseif q == 2 || q == 49
                 if w == 2
                     save1 = string(sprintf('G1 X%.3f Y%.3f',x2(1),y2(1)));
                     save2 = string(sprintf('G1 X%.3f Y%.3f E%.5f',x2(w),y2(w),e));
-                    sto1 = [sto1 ; save1; save2];
+                    sto1 = [sto1 ; save1];% save2];
                     
                 else
                     save = string(sprintf('G1 X%.3f Y%.3f E%.5f',x2(w),y2(w),e));
@@ -545,7 +545,7 @@ elseif q == 2 || q == 49
                 if w == 2
                     save1 = string(sprintf('G1 X%.3f Y%.3f',x2(1),y2(1)));
                     save2 = string(sprintf('G1 X%.3f Y%.3f E%.5f',x2(w),y2(w),e));
-                    sto1 = [sto1 ; save1; save2];
+                    sto1 = [sto1 ; save1;save2];
                     
                 else
                     save = string(sprintf('G1 X%.3f Y%.3f E%.5f',x2(w),y2(w),e));
@@ -586,22 +586,45 @@ elseif q == 2 || q == 49
             yref = y(i);
             enter = 1;
             if xref == 0.2 && yref == 19.8 || xref == 5.2 && yref == 14.8
-                x2 = [x2 xref+noz*j];
-                y2 = [y2 yref-0.8*j];
+                x2 = [x2 xref+noz*j*0.6];
+                y2 = [y2 yref-0.8*j*0.6];
                 enter = 0;
             elseif xref <= xdiff/2
-                x2 = [x2 xref+noz*j];
+                x2 = [x2 xref+noz*j*0.6];
             else
-                x2 = [x2 xref-noz*j];
+                x2 = [x2 xref-noz*j*0.6];
             end
             if enter == 1
                 if yref <= ydiff/2
-                    y2 = [y2 yref+noz*j];
+                    y2 = [y2 yref+noz*j*0.6];
                 else
-                    y2 = [y2 yref-noz*j];
+                    y2 = [y2 yref-noz*j*0.6];
                 end
             end
         end
+        
+            for v = 2:length(x2)
+                yy = [y2(v-1) y2(v)];
+                xx = [x2(v-1) x2(v)];
+                
+                if diff(xx) == 0
+                    e = abs(diff(yy));
+                elseif diff(yy) == 0
+                    e = abs(diff(xx));
+                else
+                    e = sum(sqrt(diff(xx).^2+diff(yy).^2));
+                end
+                
+                if v == 2
+                    save1 = string(sprintf('G1 X%.3f Y%.3f',x2(1),y2(1)));
+                    save2 = string(sprintf('G1 X%.3f Y%.3f E%.5f',x2(v),y2(v),e));
+                    sto1 = [sto1 ; save1; save2];
+                    
+                else
+                    save = string(sprintf('G1 X%.3f Y%.3f E%.5f',x2(v),y2(v),e));
+                    sto1 = [sto1 ; save];
+                end
+            end
         plot(x2,y2)
     end
     gsto = [gsto ; sto1];
