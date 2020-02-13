@@ -427,28 +427,29 @@ for q = 1:length(zstore)
    
     pstoreud = flipud(pstore);
     
-     for i = 2:length(pstore)
+     for i = 1:length(pstoreud)
         plot([pstore(i,1) pstore(i,1)],[line pstore(i,2)])
-        e = abs(pstoreud(i,2)-line);
+        e = abs(pstoreud(i,1)-0.2-line);
         
         if i == 1
            lines = sprintf("G1 X%.3f Y%.3f",line,pstoreud(i,2)) 
            sto1 = [sto1 ; lines];
-        elseif i == length(pstoreud)
-           e = pstoreud(i-1,2)-line;
-           lines = sprintf("G1 X%.3f Y%.3f E%.5f",line,pstoreud(i-1,1),e)
-           next = sprintf("G1 X%.3f Y%.3f",line,pstoreud(i,1))
-           e = pstoreud(i,2)-line;
-           last = sprintf("G1 X%.3f Y%.3f E%.5f",pstoreud(i,2),pstoreud(i,1),e)
-           sto1 = [sto1 ; lines ; next ; last]; 
+%         elseif i == length(pstoreud)
+%            next = sprintf("G1 X%.3f Y%.3f",pstoreud(i-1,1)-0.2,pstoreud(i-1,2))
+%            e = pstoreud(i-1,1)-0.2-line;
+%            lines = sprintf("G1 X%.3f Y%.3f E%.5f",line,pstoreud(i-1,2),e)
+% 
+%            %e = pstoreud(i,2)-line;
+%            %last = sprintf("G1 X%.3f Y%.3f E%.5f",pstoreud(i,2),pstoreud(i,1),e)
+%            sto1 = [sto1 ; next ; lines ];%; last]; 
         elseif mod(i,2) == 0
-            lines = sprintf("G1 X%.3f Y%.3f E%.5f",pstoreud(i,1),pstoreud(i,2),e)
-            next = sprintf("G1 X%.3f Y%.3f",pstoreud(i,2),pstoreud(i,1))
-            sto1 = [sto1 ; lines ; next];
-        else
-            lines = sprintf("G1 X%.3f Y%.3f E%.5f",line,pstoreud(i,2),e)
             next = sprintf("G1 X%.3f Y%.3f",line,pstoreud(i,2))
-            sto1 = [sto1 ; lines ; next];
+            lines = sprintf("G1 X%.3f Y%.3f E%.5f",pstoreud(i,1)-0.2,pstoreud(i,2),e)
+            sto1 = [sto1 ; next ; lines];
+        else
+            next = sprintf("G1 X%.3f Y%.3f",pstoreud(i,1)-0.2,pstoreud(i,2))
+            lines = sprintf("G1 X%.3f Y%.3f E%.5f",line,pstoreud(i,2),e)
+            sto1 = [sto1 ; next ; lines];
         end
     end
     
