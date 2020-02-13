@@ -111,6 +111,8 @@ for q = 1:length(zstore)
     y3 = [];
     sto1 = [];
     
+    
+    
     for i = 1:length(x)
         xref = x(i);
         yref = y(i);
@@ -172,6 +174,7 @@ for q = 1:length(zstore)
     ylim([-1 21])
     
     % FIRST BOTTOM LAYER
+    if q == 1 || 2 || 3 || length(zstore)-3 || length(zstore)-2 || length(zstore)-1
     
     x1y1 = [0.6 19-0.2];
     x2y2 = [5.6 14-0.2];
@@ -483,7 +486,7 @@ for q = 1:length(zstore)
         end
     end
     
-
+    end
     
 %     figure
 %     hold on
