@@ -131,21 +131,27 @@ for q = 1:length(zstore)
                 y2 = [y2 yref-noz];
             end
         end
+    end
+        
+    for v = 2:length(x)
+        yy = [y2(v-1) y2(v)];
+        xx = [x2(v-1) x2(v)];
         
         if diff(x2) == 0
-            e = abs(diff(y2));
+            e = abs(diff(yy));
         elseif diff(y2) == 0
-            e = abs(diff(x2));
+            e = abs(diff(xx));
         else
-            e = sum(sqrt(diff(x2).^2+diff(y2).^2));
+            e = sum(sqrt(diff(xx).^2+diff(yy).^2));
         end
         
-        if i == 1
-            save1 = string(sprintf('G1 X%.3f Y%.3f',x2(1),y2(1)));
-            sto1 = [sto1 ; save1];
+        if v == 2
+            save1 = string(sprintf('G1 X%.3f Y%.3f',0.6,5.6));
+            save2 = string(sprintf('G1 X%.3f Y%.3f E%.5f',x2(v),y2(v),e));
+            sto1 = [sto1 ; save1; save2];
             
         else
-            save = string(sprintf('G1 X%.3f Y%.3f E%.5f',x2(i),y2(i),e));
+            save = string(sprintf('G1 X%.3f Y%.3f E%.5f',x2(v),y2(v),e));
             sto1 = [sto1 ; save];
         end
     end
@@ -196,7 +202,7 @@ for q = 1:length(zstore)
     
     sto1 = [];
     
-    for i = i:numlines0
+    for i = 1:length(pstore)
         plot([pstore(i,1) pstore(i,1)],[line pstore(i,2)])
         e = pstore(i,2)-line;
         
@@ -218,11 +224,15 @@ for q = 1:length(zstore)
         
         
         if i == 1
-           lines = sprintf("G1 X%.3f Y%.3f",pstore(i,1),pstore(i,2)) 
+           lines = sprintf("G1 X%.3f Y%.3f",pstore(i,1),line) 
            sto1 = [sto1 ; lines];
-        elseif i == numlines0
-           lines = sprintf("G1 X%.3f Y%.3f",pstore(i,1),line)
-           sto1 = [sto1 ; lines]; 
+        elseif i == length(pstore)
+           e = pstore(i-1,2)-line;
+           lines = sprintf("G1 X%.3f Y%.3f E%.5f",pstore(i-1,1),line,e)
+           next = sprintf("G1 X%.3f Y%.3f",pstore(i,1),line)
+           e = pstore(i,2)-line;
+           last = sprintf("G1 X%.3f Y%.3f E%.5f",pstore(i,1),pstore(i,2),e)
+           sto1 = [sto1 ; lines ; next ; last]; 
         elseif mod(i,2) == 0
             lines = sprintf("G1 X%.3f Y%.3f E%.5f",pstore(i-1,1),pstore(i,2),e)
             next = sprintf("G1 X%.3f Y%.3f",pstore(i,1),pstore(i,2))
@@ -235,7 +245,7 @@ for q = 1:length(zstore)
     end
      
         
-    gsto = [gsto ; sto1];
+  gsto = [gsto ; sto1];
     
     x1 = 6;
     x2 = 9.4;
@@ -244,6 +254,8 @@ for q = 1:length(zstore)
     numlines = (9.6-6)/0.4;
     dist2 = (x2-x1)/round(numlines);
     xsto1 = x1:dist2:x2;
+    
+    sto1 = [];
     
     for i = 1:length(xsto1)
         plot([xsto1(i) xsto1(i)],[y1 y2])
@@ -274,6 +286,8 @@ for q = 1:length(zstore)
     numlines2 = (x22-x12)/0.4;
     dist3 = (x22-x12)/round(numlines2);
     xsto2 = x12:dist3:x22;
+    
+    sto1 = [];
     
     for i = 1:length(xsto2)
         plot([xsto2(i) xsto2(i)],[y12 y22])
