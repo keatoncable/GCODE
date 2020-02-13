@@ -494,9 +494,9 @@ elseif q == 2 || q == 49
 %     %plot(xref,yref)
 %     xlim([-1 21])
 %     ylim([-1 21])
+       sto1 = [];
 
-
-    for j = 3:2:11
+    for j = 5:2:11
         x2 = [];
         y2 = [];
         x3 = [];
@@ -506,16 +506,78 @@ elseif q == 2 || q == 49
             x2 = [3.2 3.2 6.6 6.6 3.2];
             y2 = [8.8 13.6 10 8.8 8.8];
             plot(x2,y2)
-            continue
+            for w = 2:(length(x2))
+                x22 = [x2(w-1) x2(w)];
+                y22 = [y2(w-1) y2(w)];
+                if diff(x22) == 0
+                    e = abs(diff(y22));
+                elseif diff(y22) == 0
+                    e = abs(diff(x22));
+                else
+                    e = sum(sqrt(diff(x22).^2+diff(y22).^2));
+                end
+                
+                if w == 2
+                    save1 = string(sprintf('G1 X%.3f Y%.3f',x2(1),y2(1)));
+                    save2 = string(sprintf('G1 X%.3f Y%.3f E%.5f',x2(w),y2(w),e));
+                    sto1 = [sto1 ; save1; save2];
+                    
+                else
+                    save = string(sprintf('G1 X%.3f Y%.3f E%.5f',x2(w),y2(w),e));
+                    sto1 = [sto1 ; save];
+                end
+            end
         elseif j ==9
             x2 = [8.6 8.6 12 12 8.6];
             y2 = [8.2 16.8 16.8 8.2 8.2];
             plot(x2,y2)
+            for w = 2:(length(x2))
+                x22 = [x2(w-1) x2(w)];
+                y22 = [y2(w-1) y2(w)];
+                if diff(x22) == 0
+                    e = abs(diff(y22));
+                elseif diff(y22) == 0
+                    e = abs(diff(x22));
+                else
+                    e = sum(sqrt(diff(x22).^2+diff(y22).^2));
+                end
+                
+                if w == 2
+                    save1 = string(sprintf('G1 X%.3f Y%.3f',x2(1),y2(1)));
+                    save2 = string(sprintf('G1 X%.3f Y%.3f E%.5f',x2(w),y2(w),e));
+                    sto1 = [sto1 ; save1; save2];
+                    
+                else
+                    save = string(sprintf('G1 X%.3f Y%.3f E%.5f',x2(w),y2(w),e));
+                    sto1 = [sto1 ; save];
+                end
+            end
             continue
         elseif j==11
             x2 = [9.6 9.6 11 11 9.6];
             y2 = [9.6 15 15 9.6 9.6];
             plot(x2,y2)
+            for w = 2:(length(x2))
+                x22 = [x2(w-1) x2(w)];
+                y22 = [y2(w-1) y2(w)];
+                if diff(x22) == 0
+                    e = abs(diff(y22));
+                elseif diff(y22) == 0
+                    e = abs(diff(x22));
+                else
+                    e = sum(sqrt(diff(x22).^2+diff(y22).^2));
+                end
+                
+                if w == 2
+                    save1 = string(sprintf('G1 X%.3f Y%.3f',x2(1),y2(1)));
+                    save2 = string(sprintf('G1 X%.3f Y%.3f E%.5f',x2(w),y2(w),e));
+                    sto1 = [sto1 ; save1; save2];
+                    
+                else
+                    save = string(sprintf('G1 X%.3f Y%.3f E%.5f',x2(w),y2(w),e));
+                    sto1 = [sto1 ; save];
+                end
+            end
             break
         end
         
@@ -542,6 +604,7 @@ elseif q == 2 || q == 49
         end
         plot(x2,y2)
     end
+    gsto = [gsto ; sto1];
     end
 end
 
