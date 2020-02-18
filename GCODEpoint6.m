@@ -155,7 +155,12 @@ for q = 1:length(zstore)
         end
     end
     
-    gsto = [gsto ; sto1];
+    
+    if q == 1 || q == 2 || q == (length(zstore)-1) || q == length(zstore)
+        gsto = [gsto ; sto1];
+    else
+        raise = sprintf("G1 Z%.3f",zstore(q))
+    end
     
     % figure
     % plot3(x,y,zstore,x2,y2,zstore,x3,y3,zstore)
@@ -570,9 +575,13 @@ elseif q == 2 || q == 49
                 
                 if w == 2
                     save1 = string(sprintf('G1 X%.3f Y%.3f',x2(1),y2(1)));
+                    lower = sprintf("G1 Z%.3f",zstore(q));
                     save2 = string(sprintf('G1 X%.3f Y%.3f E%.5f',x2(w),y2(w),e));
-                    sto1 = [sto1 ; save1; save2];
-                    
+                    sto1 = [sto1 ; save1; lower; save2];
+                elseif w == length(x2)
+                    save = string(sprintf('G1 X%.3f Y%.3f E%.5f',x2(w),y2(w),e));
+                    raise = sprintf("G1 Z%.3f",zstore(q)+1);
+                    sto1 = [sto1 ; save; raise];
                 else
                     save = string(sprintf('G1 X%.3f Y%.3f E%.5f',x2(w),y2(w),e));
                     sto1 = [sto1 ; save];
@@ -617,10 +626,14 @@ elseif q == 2 || q == 49
                 end
                 
                 if v == 2
+                    lower  = sprintf("G1 Z%.3f",zstore(q));
                     save1 = string(sprintf('G1 X%.3f Y%.3f',x2(1),y2(1)));
                     save2 = string(sprintf('G1 X%.3f Y%.3f E%.5f',x2(v),y2(v),e));
-                    sto1 = [sto1 ; save1; save2];
-                    
+                    sto1 = [sto1 ; save1 ; lower ; save2];
+                elseif v == length(x)
+                    save = string(sprintf('G1 X%.3f Y%.3f E%.5f',x2(v),y2(v),e));
+                    raise = sprintf("G1 Z%.3f",zstore(q)+1);
+                    sto1 = [sto1 ; save; raise];
                 else
                     save = string(sprintf('G1 X%.3f Y%.3f E%.5f',x2(v),y2(v),e));
                     sto1 = [sto1 ; save];
