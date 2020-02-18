@@ -174,7 +174,7 @@ for q = 1:length(zstore)
     if q == 1 || q == length(zstore)
     
     x1y1 = [0.6 19-0.8];
-    x2y2 = [5.6 14-0.8];
+    x2y2 = [5.8 14-0.8];
     v = x2y2 - x1y1;
     n = sqrt((x1y1(1)-x2y2(1))^2+((x1y1(2)-x2y2(2))^2));
     u = v/n;
@@ -230,12 +230,12 @@ for q = 1:length(zstore)
         
   gsto = [gsto ; sto1];
     
-    x1 = 6.2;
+    x1 = 6.4;
     x2 = 9.2;
     y1 = 1;
     y2 = 19;
     numlines = (9.6-6)/0.6;
-    dist2 = (x2-x1)/round(numlines);
+    dist2 = (x2-x1)/ceil(numlines);
     xsto1 = x1:dist2:x2;
     
     sto1 = [];
@@ -262,12 +262,12 @@ for q = 1:length(zstore)
     
      gsto = [gsto ; sto1];
     
-    x12 = 9.6;
+    x12 = 9.2;
     x22 = 14.2;
-    y12 = 6;
+    y12 = 6.2;
     y22 = 19;
     numlines2 = (x22-x12)/0.6;
-    dist3 = (x22-x12)/round(numlines2);
+    dist3 = (x22-x12)/ceil(numlines2);
     xsto2 = x12:dist3:x22;
     
     sto1 = [];
@@ -301,9 +301,9 @@ elseif q == 2 || q == 49
     x12 = 6;
     x22 = 9;
     y12 = 1.2;
-    y22 = 5.8;
+    y22 = 6.2;
     numlines2 = (y22-y12)/0.6;
-    dist3 = (y22-y12)/round(numlines2);
+    dist3 = (y22-y12)/ceil(numlines2);
     ysto2 = y12:dist3:y22;
 
     sto1 = [];
@@ -311,17 +311,17 @@ elseif q == 2 || q == 49
         plot([x12 x22],[ysto2(i) ysto2(i)])
         e = abs(x12-x22);
         if i == 1
-           lines = sprintf("G1 X%.3f Y%.3f",x12,ysto2(i)) 
+           lines = sprintf("G1 X%.3f Y%.3f",x12,ysto2(i)); 
            sto1 = [sto1 ; lines];
         elseif i == 1:length(ysto2)
-            lines = sprintf("G1 X%.3f Y%.3f",x12,ysto2(i)) 
+            lines = sprintf("G1 X%.3f Y%.3f",x12,ysto2(i)); 
            sto1 = [sto1 ; lines];
         elseif mod(i,2) == 0
-            lines = sprintf("G1 X%.3f Y%.3f E%.5f",x22,ysto2(i-1),e)
+            lines = sprintf("G1 X%.3f Y%.3f E%.5f",x22,ysto2(i-1),e);
             next = sprintf("G1 X%.3f Y%.3f",x22,ysto2(i))
             sto1 = [sto1 ; lines ; next];
         else
-            lines = sprintf("G1 X%.3f Y%.3f E%.5f",x12,ysto2(i-1),e)
+            lines = sprintf("G1 X%.3f Y%.3f E%.5f",x12,ysto2(i-1),e);
             next = sprintf("G1 X%.3f Y%.3f",x12,ysto2(i))
             sto1 = [sto1 ; lines ; next];
         end
@@ -334,7 +334,7 @@ elseif q == 2 || q == 49
     y12 = 6.2;
     y22 = 13.8;
     numlines2 = (y22-y12)/0.6;
-    dist3 = (y22-y12)/round(numlines2);
+    dist3 = (y22-y12)/ceil(numlines2);
     ysto2 = y12:dist3:y22;
     
     sto1 = [];
@@ -362,10 +362,10 @@ elseif q == 2 || q == 49
     
     x12 = 6;
     x22 = 14;
-    y12 = 14.2;
+    y12 = 13.8;
     y22 = 19;
     numlines2 = (y22-y12)/0.6;
-    dist3 = (y22-y12)/round(numlines2);
+    dist3 = (y22-y12)/ceil(numlines2);
     ysto2 = y12:dist3:y22;
     
     for i = 1:round(numlines2)
