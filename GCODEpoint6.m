@@ -233,7 +233,7 @@ for q = 1:length(zstore)
     x1 = 6.4;
     x2 = 9.2;
     y1 = 1;
-    y2 = 19;
+    y2 = 18.8;
     numlines = (9.6-6)/0.6;
     dist2 = (x2-x1)/ceil(numlines);
     xsto1 = x1:dist2:x2;
@@ -265,7 +265,7 @@ for q = 1:length(zstore)
     x12 = 9.2;
     x22 = 14.2;
     y12 = 6.2;
-    y22 = 19;
+    y22 = 18.8;
     numlines2 = (x22-x12)/0.6;
     dist3 = (x22-x12)/ceil(numlines2);
     xsto2 = x12:dist3:x22;
@@ -554,7 +554,7 @@ elseif q == 2 || q == 49
 %             end
             continue
         elseif j==11
-            x2 = [9.6 9.6 11 11 9.6];
+            x2 = [9 9 11.2 11.2 9];
             y2 = [9.6 15 15 9.6 9.6];
             plot(x2,y2)
             for w = 2:(length(x2))
@@ -584,21 +584,22 @@ elseif q == 2 || q == 49
         for i = 1:length(x)
             xref = x(i);
             yref = y(i);
+            multi = 0.51;
             enter = 1;
             if xref == 0.2 && yref == 19.8 || xref == 5.2 && yref == 14.8
-                x2 = [x2 xref+noz*j*0.6];
-                y2 = [y2 yref-1.4*j*0.6];
+                x2 = [x2 xref+noz*j*multi];
+                y2 = [y2 yref-1.4*j*multi];
                 enter = 0;
             elseif xref <= xdiff/2
-                x2 = [x2 xref+noz*j*0.6];
+                x2 = [x2 xref+noz*j*multi];
             else
-                x2 = [x2 xref-noz*j*0.6];
+                x2 = [x2 xref-noz*j*multi];
             end
             if enter == 1
                 if yref <= ydiff/2
-                    y2 = [y2 yref+noz*j*0.6];
+                    y2 = [y2 yref+noz*j*multi];
                 else
-                    y2 = [y2 yref-noz*j*0.6];
+                    y2 = [y2 yref-noz*j*multi];
                 end
             end
         end
