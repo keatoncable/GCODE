@@ -145,7 +145,7 @@ for q = 1:length(zstore)
         end
         
         if v == 2
-            save1 = string(sprintf('G1 X%.3f Y%.3f',0.8,5.4));
+            save1 = string(sprintf('G1 X%.3f Y%.3f',0.8,5.8));
             save2 = string(sprintf('G1 X%.3f Y%.3f E%.5f',x2(v),y2(v),e));
             sto1 = [sto1 ; save1; save2];
             
@@ -329,8 +329,8 @@ elseif q == 2 || q == 49
     
     gsto = [gsto ; sto1];
     
-    x12 = 1;
-    x22 = 14;
+    x12 = 1.2;
+    x22 = 13.8;
     y12 = 6.2;
     y22 = 13.8;
     numlines2 = (y22-y12)/0.6;
