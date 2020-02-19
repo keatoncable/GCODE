@@ -149,6 +149,10 @@ for q = 1:length(zstore)
             save2 = string(sprintf('G1 X%.3f Y%.3f E%.5f',x2(v),y2(v),e));
             sto1 = [sto1 ; save1; save2];
             
+        elseif v == length(x)
+            save = string(sprintf('G1 X%.3f Y%.3f E%.5f',x2(v),y2(v),e));
+            lift = sprintf("G1 Z%.3f",zstore(q)+1);
+            sto1 = [sto1 ; save; lift];
         else
             save = string(sprintf('G1 X%.3f Y%.3f E%.5f',x2(v),y2(v),e));
             sto1 = [sto1 ; save];
@@ -212,8 +216,9 @@ for q = 1:length(zstore)
         e = pstore(i,2)-line;
         
         if i == 1
+           lower = sprintf("G1 Z%.3f",zstore(q));
            lines = sprintf("G1 X%.3f Y%.3f",pstore(i,1),line);
-           sto1 = [sto1 ; lines];
+           sto1 = [sto1 ; lines; lower];
         elseif i == length(pstore)
            e = pstore(i-1,2)-line;
            lines = sprintf("G1 X%.3f Y%.3f E%.5f",pstore(i-1,1),line,e);
@@ -316,10 +321,11 @@ elseif q == 2 || q == 49
         plot([x12 x22],[ysto2(i) ysto2(i)])
         e = abs(x12-x22);
         if i == 1
+           lower = sprintf("G1 Z%.3f",zstore(q));
            lines = sprintf("G1 X%.3f Y%.3f",x12,ysto2(i)); 
-           sto1 = [sto1 ; lines];
+           sto1 = [sto1 ; lines; lower];
         elseif i == 1:length(ysto2)
-            lines = sprintf("G1 X%.3f Y%.3f",x12,ysto2(i)); 
+            lines = sprintf("G1 X%.3f Y%.3f",x12,ysto2(i));
            sto1 = [sto1 ; lines];
         elseif mod(i,2) == 0
             lines = sprintf("G1 X%.3f Y%.3f E%.5f",x22,ysto2(i-1),e);
@@ -347,17 +353,18 @@ elseif q == 2 || q == 49
         plot([x12 x22],[ysto2(i) ysto2(i)])
         e = abs(x12-x22);
         if i == 1
-           lines = sprintf("G1 X%.3f Y%.3f",x12,ysto2(i)) 
+           lines = sprintf("G1 X%.3f Y%.3f",x12,ysto2(i));
            sto1 = [sto1 ; lines];
         elseif i == 1:length(ysto2)
-            lines = sprintf("G1 X%.3f Y%.3f",x12,ysto2(i)) 
+            lines = sprintf("G1 X%.3f Y%.3f",x12,ysto2(i));
            sto1 = [sto1 ; lines];
+           break
         elseif mod(i,2) == 0
-            lines = sprintf("G1 X%.3f Y%.3f E%.5f",x22,ysto2(i-1),e)
+            lines = sprintf("G1 X%.3f Y%.3f E%.5f",x22,ysto2(i-1),e);
             next = sprintf("G1 X%.3f Y%.3f",x22,ysto2(i))
             sto1 = [sto1 ; lines ; next];
         else
-            lines = sprintf("G1 X%.3f Y%.3f E%.5f",x12,ysto2(i-1),e)
+            lines = sprintf("G1 X%.3f Y%.3f E%.5f",x12,ysto2(i-1),e);
             next = sprintf("G1 X%.3f Y%.3f",x12,ysto2(i))
             sto1 = [sto1 ; lines ; next];
         end
@@ -382,18 +389,19 @@ elseif q == 2 || q == 49
         plot([x12 x22],[ysto2(i) ysto2(i)])
         e = abs(x12-x22);
         if i == 1
-           lines = sprintf("G1 X%.3f Y%.3f",x12,ysto2(i)) 
-           sto1 = [sto1 ; lines];
+           lines = sprintf("G1 X%.3f Y%.3f",x12,ysto2(i)); 
+           sto1 = [sto1 ; lines;];
         elseif i == 1:length(ysto2)
-            lines = sprintf("G1 X%.3f Y%.3f",x12,ysto2(i)) 
+            lines = sprintf("G1 X%.3f Y%.3f",x12,ysto2(i)); 
            sto1 = [sto1 ; lines];
+           break
         elseif mod(i,2) == 0
-            lines = sprintf("G1 X%.3f Y%.3f E%.5f",x22,ysto2(i-1),e)
-            next = sprintf("G1 X%.3f Y%.3f",x22,ysto2(i))
+            lines = sprintf("G1 X%.3f Y%.3f E%.5f",x22,ysto2(i-1),e);
+            next = sprintf("G1 X%.3f Y%.3f",x22,ysto2(i));
             sto1 = [sto1 ; lines ; next];
         else
-            lines = sprintf("G1 X%.3f Y%.3f E%.5f",x12,ysto2(i-1),e)
-            next = sprintf("G1 X%.3f Y%.3f",x12,ysto2(i))
+            lines = sprintf("G1 X%.3f Y%.3f E%.5f",x12,ysto2(i-1),e);
+            next = sprintf("G1 X%.3f Y%.3f",x12,ysto2(i));
             sto1 = [sto1 ; lines ; next];
         end
     end
@@ -662,6 +670,8 @@ footer = string(["G4 					; wait";
 %% Compile
 
 gcode = [header ; gsto ; footer];
-gcode2 = erase(gcode,'""');
-
-writematrix(gcode2,'test.txt')
+gcode2 = erase(gcode,"""");
+fileID = fopen('test.txt');
+nbyt = fprintf(fileID,'%s',gcode2)
+fclose(fileID)
+%writematrix(gcode2,'test.txt')
